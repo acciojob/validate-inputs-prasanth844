@@ -2,98 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Validation</title>
+    <title>Form Validation</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 300px;
-        }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
+
         label {
+            display: block;
             margin-bottom: 5px;
-            font-weight: bold;
         }
+
         input {
-            padding: 10px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            font-size: 16px;
+            display: block;
+            padding: 8px;
+            width: 250px;
+            border: 2px solid #333;
+            border-radius: 4px;
             outline: none;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.4s ease;
         }
+
         button {
-            padding: 10px;
-            width: fit-content;
+            margin-top: 10px;
+            padding: 10px 20px;
             cursor: pointer;
+            border: 2px solid #333;
             background-color: lightgreen;
-            border: 2px solid #000;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="form-container">
-        <div class="input-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name">
-        </div>
-
-        <div class="input-group">
-            <label for="email">Email:</label>
-            <input type="text" id="email">
-        </div>
-
-        <div class="input-group">
-            <label for="mobile">Phone:</label>
-            <input type="text" id="mobile">
-        </div>
-
-        <button id="submitBtn">Submit</button>
+    <div class="form-group">
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="At least 3 letters">
     </div>
 
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="text" id="email" placeholder="example@mail.com">
+    </div>
+
+    <div class="form-group">
+        <label>Phone:</label>
+        <input type="text" id="phone" placeholder="10 digit number">
+    </div>
+
+    <button type="button" id="submitBtn">Submit</button>
+
     <script>
-        // Definitions based on your specific patterns
-        const patterns = {
+        const validationRules = {
             name: /^[A-Za-z]{3,}$/,
-            // Note: This pattern is case-sensitive for lowercase letters only
             email: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-            mobile: /^[0-9]{10}$/
+            phone: /^[0-9]{10}$/
         };
 
-        function validate(inputElement, regex) {
-            const value = inputElement.value;
-            
-            // If input is empty, reset to white. 
-            // If it matches regex, lightgreen. If not, pink.
-            if (value === "") {
-                inputElement.style.backgroundColor = "white";
-            } else if (regex.test(value)) {
-                inputElement.style.backgroundColor = "lightgreen";
+        function validateField(input, pattern) {
+            if (input.value === "") {
+                input.style.backgroundColor = "white";
+            } else if (pattern.test(input.value)) {
+                input.style.backgroundColor = "lightgreen";
             } else {
-                inputElement.style.backgroundColor = "pink";
+                input.style.backgroundColor = "pink";
             }
         }
 
-        // Add event listeners to each input field
-        const nameInput = document.getElementById('name');
-        const emailInput = document.getElementById('email');
-        const mobileInput = document.getElementById('mobile');
+        Object.keys(validationRules).forEach(id => {
+            const input = document.getElementById(id);
+            const pattern = validationRules[id];
 
-        nameInput.addEventListener('input', () => validate(nameInput, patterns.name));
-        emailInput.addEventListener('input', () => validate(emailInput, patterns.email));
-        mobileInput.addEventListener('input', () => validate(mobileInput, patterns.mobile));
-
+            input.addEventListener("input", () => {
+                validateField(input, pattern);
+            });
+        });
     </script>
+
 </body>
 </html>
