@@ -1,65 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Input Validation</title>
-
     <style>
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .input-box { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { 
+            width: 300px; 
+            padding: 10px; 
+            border: 2px solid #333; 
+            border-radius: 4px; 
+            outline: none;
+            font-size: 16px;
         }
-
-        input {
-            width: 300px;
-            padding: 8px;
-            border: 2px solid black;
-            transition: background-color 0.4s ease;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 8px 20px;
-            background-color: lightgreen;
-            border: 2px solid black;
-            cursor: pointer;
-        }
+        /* Visual cues for the user */
+        .hint { font-size: 0.8em; color: #666; margin-top: 3px; }
     </style>
 </head>
 <body>
 
-    <label>Name:</label>
-    <input type="text" id="name">
+    <div class="input-box">
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="At least 3 letters">
+    </div>
 
-    <label>Email:</label>
-    <input type="text" id="email">
+    <div class="input-box">
+        <label>Email:</label>
+        <input type="text" id="email" placeholder="example@mail.com">
+    </div>
 
-    <label>Phone:</label>
-    <input type="text" id="mobile">
-
-    <br>
-    <button onclick="validate()">Submit</button>
+    <div class="input-box">
+        <label>Phone (Mobile):</label>
+        <input type="text" id="mobile" placeholder="10 digits">
+    </div>
 
     <script>
-        function validate() {
-            let name = document.getElementById("name");
-            let email = document.getElementById("email");
-            let mobile = document.getElementById("mobile");
+        // Exact patterns provided in your requirements
+        // Note: Added ^ and $ to ensure the whole string matches
+        const patterns = {
+            name: /^[A-Za-z]{3,}$/,
+            email: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+            mobile: /^[0-9]{10}$/
+        };
 
-            let namePattern = /^[A-Za-z]{3,}$/;
-            let emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-            let mobilePattern = /^[0-9]{10}$/;
+        const inputs = document.querySelectorAll('input');
 
-            name.style.backgroundColor =
-                namePattern.test(name.value) ? "lightgreen" : "pink";
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const id = this.id;
+                const pattern = patterns[id];
+                const value = this.value;
 
-            email.style.backgroundColor =
-                emailPattern.test(email.value) ? "lightgreen" : "pink";
-
-            mobile.style.backgroundColor =
-                mobilePattern.test(mobile.value) ? "lightgreen" : "pink";
-        }
+                // 1. If empty, keep white
+                if (value === "") {
+                    this.style.backgroundColor = "white";
+                } 
+                // 2. Test against the regex pattern
+                else if (pattern.test(value)) {
+                    this.style.backgroundColor = "lightgreen";
+                } 
+                // 3. If it doesn't match, turn pink
+                else {
+                    this.style.backgroundColor = "pink";
+                }
+            });
+        });
     </script>
-
 </body>
 </html>
